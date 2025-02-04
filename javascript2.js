@@ -11,14 +11,21 @@ container.addEventListener('click', (event) => {
   
     buttonManager(event.target)
   
-  })
-/* 356+23*(32-34) */
+  }
+)
+
+const buttonManager = function (equationString) {
+    equationArray = divideEquation();
+    let result = calculate(equationArray);
+    return result;
+}
+
 const calculate = function(equationArray) {
     let res = 0;
     let leftParanthesisIdxs = getAllIndexesOfMatch(equationArray, '(');
     let rightParanthesisIdxs = getAllIndexesOfMatch(equationArray, ')');
 
-    if (leftParanthesisIdxs.length != rightParanthesisIdxs) {
+    if (leftParanthesisIdxs.length != rightParanthesisIdxs.length) {
         return; /* Invalid equation */
     }
 
@@ -29,16 +36,11 @@ const calculate = function(equationArray) {
         partialCalculation(equationArray); 
         // repeat until length = 1, recursion for paranthesis
     }
-    for (let i = 0; i < equationArray.length; i++) {
-        castNumber = parseFloat(equationArray[i],10);
-        if (typeof castNumber === 'number') {
-            res = add(res, castNumber);
-        }
-        else if (equationArray[i] === '*') {
-            i++;
-            res = add(res, parseFloat(equationArray[i]));
-        }
+
+    if (equationArray.length === 1) {
+        return equationArray[0];
     }
+    
 }
 
 const getAllIndexesOfMatch = function (arr, val) {
@@ -85,29 +87,30 @@ const partialCalculation = function(equationArray) {
 
     let firstSubtract = equationArray.indexOf('-')
     if (firstSubtract > 0 && firstSubtract < equationArray.length) {
-        let result = add(parseFloat(equationArray[firstSubtract-1]),parseFloat(equationArray[firstSubtract+1]));
+        let result = subtract(parseFloat(equationArray[firstSubtract-1]),parseFloat(equationArray[firstSubtract+1]));
         equationArray.splice(firstSubtract - 1, 3, result);
         return;
     }
 
 }
 
-const calculateParenthesis = function (array) {
+const calculateParenthesis = function (equationArray) {
     let addLeftMultiply = false;
     let addRightMultiply = false;
     let firstLeftParanthesisIdx = equationArray.indexOf('(');
     let firstRightParanthesisIdx = equationArray.indexOf(')'); 
     let numberOfElementsInParanthesis = firstRightParanthesisIdx - firstLeftParanthesisIdx + 1;
     if (numberOfElementsInParanthesis <= 2) {
-        return; //Something went wrong
+        return; //Something went wrong   
     }
-    if (firstLeftParanthesisIdx -1 >= 0 && parseFloat(equationArray[firstLeftParanthesisIdx - 1]) === 'number') {
+    
+    if (firstLeftParanthesisIdx -1 >= 0 && typeof parseFloat(equationArray[firstLeftParanthesisIdx - 1]) === 'number') {
         addLeftMultiply = true;
     }
-    if (firstRightParanthesisIdx + 1 >= 0 && parseFloat(equationArray[firstRightParanthesisIdx + 1]) === 'number') {
+    if (firstRightParanthesisIdx + 1 >= 0 && typeof parseFloat(equationArray[firstRightParanthesisIdx + 1]) === 'number') {
         addRightMultiply = true;
     }
-    let paranthesisArray = equationArray.slice(firstLeftParanthesisIdx + 1, firstRightParanthesisIdx - 1);
+    let paranthesisArray = equationArray.slice(firstLeftParanthesisIdx + 1, firstRightParanthesisIdx);
     partialCalculation(paranthesisArray);
 
     let spliceElements = [paranthesisArray] //Put in multiplications if not already in place
@@ -124,26 +127,24 @@ const calculateParenthesis = function (array) {
 }
 
 
-const divideEquation = function() {
-    let equation = inputDisplay.textContent;
+const divideEquation = function(equationString) {
     let char;
     let numberStr = '';
-    let numberList = [];
-    let calcArray =  [];
-    let castFloat = false;
-
+    let equationArray = [];
     
-    for (let i = 0; i < equation.length; i++) {
-        char = equation.charAt(i)
-        if (typeof parseInt(char, 10) === 'number' || char === '.') {
+    for (let i = 0; i < equationString.length; i++) {
+        char = equationString.charAt(i)
+        if (!isNaN(char) || char === '.') {
             numberStr += char;
         }else {
-            numberList.push(numberStr);
+            equationArray.push(numberStr);
             numberStr = '';
-            numberList.push(char);          
+            equationArray.push(char);          
         }
 
     }
+
+    return equationArray;
 }
 
 /* const buttonManager = function(target) {
@@ -194,4 +195,7 @@ const updateDisplay = function (updatedString) {
     inputDisplay.textContent = updatedString;
 }
 
-console.log(add(2,3));
+// TESTING
+
+console.log(calculate(['12','(','10','/','2',')','10','-','2']));
+console.log(divideEquation('12.5+2(2*3)'));
