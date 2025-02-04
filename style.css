@@ -12,6 +12,10 @@ div {
     border: 1px solid black;
 }
 
+button {
+    font-size: 40px;
+}
+
 .sqaure {
     aspect-ratio: 1;
 }
@@ -42,7 +46,7 @@ div {
     height: 70%;
 }
 
-.calc-display, .clear-btn {
+.calc-display, .clear-btn, .res-display {
     height: 70%;
 }
 
@@ -51,11 +55,18 @@ div {
 }
 
 .calc-display {
-    width: 50%;
+    width: 40%;
 }
 
 #calc-display {
     border: none;
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+#res-display {
     height: 100%;
     width: 100%;
     margin: 0;

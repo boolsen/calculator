@@ -16,6 +16,31 @@ wrapper.addEventListener('click', (event) => {
 
 })
 
+const buttonManager = function (target) {
+    let targetClasses = target.classList;
+
+    if (targetClasses.contains('number')) {
+        if (display.textContent === '0') {
+            display.textContent = target.textContent;
+        }
+        display.textContent += target.textContent; 
+    }
+    else if (targetClasses.contains('operation')) {
+        if (operation != null) {
+            calculate(target);
+        }
+        operation = target.textContent;
+    }
+    else if (targetClasses.contains('clear')) {
+        display.textContent = '';
+        operation = null;
+        result = null;
+    }
+    else if (targetClasses.contains('cakculate')) {
+        calculate(target);
+    }
+}
+
 const add = function(num1, num2) {
     return num1 + num2;
 }
@@ -35,11 +60,13 @@ const divide = function (num1, num2) {
     return num1 / num2;
 }
 
-const calculate = function (num1, num2, operator) {
-    let res;
-    switch (operator) {
+/* const calculate = function (operatorElement) {
+    let operator = operatorElement.textContent;
+    let displayNumber = display.textContent;
+    switch (operation) {
         case "+":
-            res = add(num1, num2);
+            result = add(result, parseInt(displayNumber));
+            operation = operator
             break;
 
         case "-":
@@ -52,8 +79,7 @@ const calculate = function (num1, num2, operator) {
 
         case "/":
             res = divide(num1, num2);
-            break;
-    
+            break; 
         default:
             break;
     }
@@ -83,4 +109,4 @@ const buttonManager = function (target) {
     else if (targetClasses.contains('cakculate')) {
         calculate(target);
     }
-}
+} */
