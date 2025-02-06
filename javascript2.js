@@ -29,6 +29,9 @@ const buttonManager = function (element) {
     if (result && !isNaN(result)) {
         updateResultDisplay(result);
     }
+    else if (element.id === 'calculate') {
+        updateResultDisplay('ERROR');
+    }
 }
 
 const clearInput = function () {
