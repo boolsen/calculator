@@ -1,40 +1,100 @@
-const inputDisplay = document.querySelector('.res-display');
-const resultDisplay = document.querySelector('.calc-display');
+const inputDisplay = document.querySelector('.calc-display');
+const resultDisplay = document.querySelector('.res-display');
 const container = document.querySelector('.container');
 const operationOrder = {1: ['(',')'],2: ['*','/','%'], 3: ['+','-']};
 
 container.addEventListener('click', (event) => {
-    const isButton = event.target.nodeName === 'BUTTON';
+    // listens for any click on a button
+    const isButton = event.target.classList.contains('button');
     if (!isButton) {
       return;
-    }
-  
+    }  
     buttonManager(event.target)
-  
   }
 )
 
-const buttonManager = function (equationString) {
-    equationArray = divideEquation();
+const buttonManager = function (element) {
+    // Handles clicks on buttons
+    if (element.id === 'clear') {
+        clearInput();
+        return
+    }
+    if (element.id !== 'calculate') {
+        updateInputDisplay(element);
+    }
+
+    let equationString = inputDisplay.value;
+    equationArray = divideEquation(equationString);
     let result = calculate(equationArray);
-    return result;
+    if (!isNaN(result)) {
+        updateResultDisplay(result);
+    }
+}
+
+const clearInput = function () {
+    // Clear input display
+    inputDisplay.value = '';
+    resultDisplay.value = '';
+}
+
+const updateInputDisplay = function(element) {
+    // Updates input display textcontent
+    inputDisplay.value += element.textContent;
+}
+
+const updateResultDisplay = function (result) {
+    // Updates result display text content
+    resultDisplay.value = String(result);
+}
+
+const divideEquation = function(equationString) {
+    // Splits equationstring into an array of calculation elements
+    let char;
+    let numberStr = '';
+    let equationArray = [];
+    
+    for (let i = 0; i < equationString.length; i++) {
+        char = equationString.charAt(i)
+        if (!isNaN(char) || char === '.') {
+            numberStr += char;
+        }else {
+            if (numberStr !== '') {
+                equationArray.push(numberStr);
+            }
+            numberStr = '';
+            equationArray.push(char);          
+        }
+    }
+
+    if (numberStr !== '') {
+        equationArray.push(numberStr);
+    }
+    return equationArray;
+}
+
+const getAllIndexesOfMatch = function (arr, val) {
+    // Find all idices that matches val
+    var indexes = [], i = -1;
+    while ((i = arr.indexOf(val, i+1)) != -1){
+        indexes.push(i);
+    }
+    return indexes;
 }
 
 const calculate = function(equationArray) {
-    let res = 0;
+    // Calculates every sub equation until lenght of array = 1, that element will be the result of the equation
+
     let leftParanthesisIdxs = getAllIndexesOfMatch(equationArray, '(');
     let rightParanthesisIdxs = getAllIndexesOfMatch(equationArray, ')');
-
     if (leftParanthesisIdxs.length != rightParanthesisIdxs.length) {
-        return; /* Invalid equation */
+        return; // Invalid equation, unequal number of left and right paranthesis
     }
 
-    //split up into sub calculations, assess priority of operations and start there
-    // e.g. find multiplication symbol, do calculation for i-1 and i+1, replace elemnts in array
-    // repeat until array.length = 1
     while (equationArray.length > 1) {
-        partialCalculation(equationArray); 
-        // repeat until length = 1, recursion for paranthesis
+        let status = partialCalculation(equationArray); 
+        if (!status) {
+            return false;
+        }
     }
 
     if (equationArray.length === 1) {
@@ -43,18 +103,14 @@ const calculate = function(equationArray) {
     
 }
 
-const getAllIndexesOfMatch = function (arr, val) {
-    var indexes = [], i = -1;
-    while ((i = arr.indexOf(val, i+1)) != -1){
-        indexes.push(i);
-    }
-    return indexes;
-}
-
 const partialCalculation = function(equationArray) {
+    // Following order of operation to determine which part of the equation to calculate
     let firstPercent = equationArray.indexOf('%')
     if (firstPercent > 0 && firstPercent <= equationArray.length) {
-        let percentRatio = percent(parseFloat(equationArray[firstPercent - 1]));
+        let percentRatio = checkIfSafeToCalculate(percent, parseFloat(equationArray[firstPercent - 1]));
+        if (!percentRatio) {
+            return false;
+        }
         equationArray.splice(firstPercent - 1, 2, percentRatio);
         return;
     }
@@ -66,39 +122,66 @@ const partialCalculation = function(equationArray) {
 
     let firstMultiply = equationArray.indexOf('*')
     if (firstMultiply > 0 && firstMultiply < equationArray.length) {
-        let product = multiply(parseFloat(equationArray[firstMultiply-1]),parseFloat(equationArray[firstMultiply+1]));
+        let product = checkIfSafeToCalculate(multiply, parseFloat(equationArray[firstMultiply-1]),parseFloat(equationArray[firstMultiply+1]));
+        if (!product) {
+            return false;
+        }
         equationArray.splice(firstMultiply - 1, 3, product);
         return;
     }
 
     let firstDivide = equationArray.indexOf('/')
     if (firstDivide > 0 && firstDivide < equationArray.length) {
-        let result = divide(parseFloat(equationArray[firstDivide-1]),parseFloat(equationArray[firstDivide+1]));
+        let result = checkIfSafeToCalculate(divide, parseFloat(equationArray[firstDivide-1]),parseFloat(equationArray[firstDivide+1]));
+        if (!result) {
+            return false;
+        }
         equationArray.splice(firstDivide - 1, 3, result);
         return;
     }
 
     let firstAdd = equationArray.indexOf('+')
     if (firstAdd > 0 && firstAdd < equationArray.length) {
-        let result = add(parseFloat(equationArray[firstAdd-1]),parseFloat(equationArray[firstAdd+1]));
+        let result = checkIfSafeToCalculate(add, parseFloat(equationArray[firstAdd-1]),parseFloat(equationArray[firstAdd+1]));
+        if (!result) {
+            return false;
+        }
         equationArray.splice(firstAdd - 1, 3, result);
         return;
     }
 
     let firstSubtract = equationArray.indexOf('-')
     if (firstSubtract > 0 && firstSubtract < equationArray.length) {
-        let result = subtract(parseFloat(equationArray[firstSubtract-1]),parseFloat(equationArray[firstSubtract+1]));
+        let result = checkIfSafeToCalculate(subtract, parseFloat(equationArray[firstSubtract-1]),parseFloat(equationArray[firstSubtract+1]));
+        if (!result) {
+            return false;
+        }
         equationArray.splice(firstSubtract - 1, 3, result);
         return;
     }
 
+    return true;
+}
+
+const checkIfSafeToCalculate = function (func, num1, num2) {
+    
+    if (isNaN(parseFloat(num1)) || (num2 !== undefined && isNaN(parseFloat(num2)))) {
+        return 'ERROR';
+    }
+    if (num2 !== undefined) {
+        return func(num1, num2); // If two numbers are provided
+    }
+    return func(num1);
 }
 
 const calculateParenthesis = function (equationArray) {
+    // Calculates first paranthesis of equation by calling partialcalculate on the subarray
     let addLeftMultiply = false;
     let addRightMultiply = false;
+
     let firstLeftParanthesisIdx = equationArray.indexOf('(');
     let firstRightParanthesisIdx = equationArray.indexOf(')'); 
+
     let numberOfElementsInParanthesis = firstRightParanthesisIdx - firstLeftParanthesisIdx + 1;
     if (numberOfElementsInParanthesis <= 2) {
         return; //Something went wrong   
@@ -125,40 +208,6 @@ const calculateParenthesis = function (equationArray) {
         , numberOfElementsInParanthesis
         , ...spliceElements)
 }
-
-
-const divideEquation = function(equationString) {
-    let char;
-    let numberStr = '';
-    let equationArray = [];
-    
-    for (let i = 0; i < equationString.length; i++) {
-        char = equationString.charAt(i)
-        if (!isNaN(char) || char === '.') {
-            numberStr += char;
-        }else {
-            equationArray.push(numberStr);
-            numberStr = '';
-            equationArray.push(char);          
-        }
-
-    }
-
-    return equationArray;
-}
-
-/* const buttonManager = function(target) {
-    let input = target.textContent;
-    let targetClasses = target.classList;
-
-    if (targetClasses.contains('number')) {
-        break;
-
-    } else {
-        
-    }
-} */
-
 
 const add = function(num1, num2) {
     return num1 + num2;
@@ -191,11 +240,5 @@ const isNumeric = function (element) {
     return false;
 }
 
-const updateDisplay = function (updatedString) {
-    inputDisplay.textContent = updatedString;
-}
-
-// TESTING
-
-console.log(calculate(['12','(','10','/','2',')','10','-','2']));
-console.log(divideEquation('12.5+2(2*3)'));
+//console.log(calculate(['12','(','10','/','2',')','10','-','2']));
+//console.log(divideEquation('12.5+2(2*3)'));
