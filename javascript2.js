@@ -26,7 +26,7 @@ const buttonManager = function (element) {
     let equationString = inputDisplay.value;
     equationArray = divideEquation(equationString);
     let result = calculate(equationArray);
-    if (!isNaN(result)) {
+    if (result && !isNaN(result)) {
         updateResultDisplay(result);
     }
 }
@@ -112,12 +112,12 @@ const partialCalculation = function(equationArray) {
             return false;
         }
         equationArray.splice(firstPercent - 1, 2, percentRatio);
-        return;
+        return true;
     }
 
     if (equationArray.indexOf('(') > -1) {
         calculateParenthesis(equationArray);
-        return;
+        return true;
     }
 
     let firstMultiply = equationArray.indexOf('*')
@@ -127,7 +127,7 @@ const partialCalculation = function(equationArray) {
             return false;
         }
         equationArray.splice(firstMultiply - 1, 3, product);
-        return;
+        return true;
     }
 
     let firstDivide = equationArray.indexOf('/')
@@ -137,7 +137,7 @@ const partialCalculation = function(equationArray) {
             return false;
         }
         equationArray.splice(firstDivide - 1, 3, result);
-        return;
+        return true;
     }
 
     let firstAdd = equationArray.indexOf('+')
@@ -147,7 +147,7 @@ const partialCalculation = function(equationArray) {
             return false;
         }
         equationArray.splice(firstAdd - 1, 3, result);
-        return;
+        return true;
     }
 
     let firstSubtract = equationArray.indexOf('-')
@@ -157,7 +157,7 @@ const partialCalculation = function(equationArray) {
             return false;
         }
         equationArray.splice(firstSubtract - 1, 3, result);
-        return;
+        return true;
     }
 
     return true;
@@ -166,7 +166,7 @@ const partialCalculation = function(equationArray) {
 const checkIfSafeToCalculate = function (func, num1, num2) {
     
     if (isNaN(parseFloat(num1)) || (num2 !== undefined && isNaN(parseFloat(num2)))) {
-        return 'ERROR';
+        return false;
     }
     if (num2 !== undefined) {
         return func(num1, num2); // If two numbers are provided
