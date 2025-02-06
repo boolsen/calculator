@@ -4,62 +4,50 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style2.css">
 </head>
 <body>
     <div class="container">
-        <div class="calc-top">
-            <div class="calc-display">
-                <input type="text" id="calc-display" readonly>
-            </div>
-            <div class="res-display">
-                <input type="text" id="res-display" readonly>
-            </div>
-            <div class="clear-btn square">
-                <button class="square clear" id="clear">C</button>
-            </div>
+        <div class="display-container">
+            <input type="text" class="res-display display-input" readonly>
+            <input type="text" class="calc-display display-input" readonly>
         </div>
-        <div class="calc-bottom">
-            <div class="num-pad">
-                <div class="number-row">
-                    <div class="square number seven"><button id="seven" class="number-button seven">7</button></div>
-                    <div class="square number eight"><button id="eight" class="number-button eight">8</button></div>
-                    <div class="square number nine"><button id="nine" class="number-button nine">9</button></div>
-                </div>
-                <div class="number-row">
-                    <div class="square number four"><button id="four" class="number-button four">4</button></div>
-                    <div class="square number five"><button id="five" class="number-button five">5</button></div>
-                    <div class="square number six"><button id="six" class="number-button six">6</button></div>
-                </div>
-                <div class="number-row">
-                    <div class="square number one"><button id="one" class="number-button one">1</button></div>
-                    <div class="square number two"><button id="two" class="number-button two">2</button></div>
-                    <div class="square number three"><button id="three" class="number-button three">3</button></div>
-                </div>
-                <div class="number-row">
-                    <div class="square number zero"><button id="zero" class="number-button zero">0</button></div>
-                </div>        
+        <div class="buttons">
+            <div class="button-row">
+                <div class="button meta" id="left-paranthesis">(</div>
+                <div class="button meta" id="right-paranthesis">)</div>
+                <div class="button operator" id="percent">%</div>
+                <div class="button clear" id="clear">C</div>
             </div>
-            <div class="operators">
-                <div class="operator square">
-                    <button id="add" class="square operator-button operation">+</button>
-                </div>
-                <div class="operator square">
-                    <button id="subtract" class="square operator-button operation">-</button>
-                </div>
-                <div class="operator square">
-                    <button id="multiply" class="square operator-button operation">*</button>
-                </div>
-                <div class="operator square">
-                    <button id="divide" class="square operator-button operation">/</button>
-                </div>
-                <div class="operator square">
-                    <button id="calculate" class="square operator-button calculate">=</button>
-                </div>
+            <div class="button-row">
+                <div class="button number" id="seven">7</div>
+                <div class="button number" id="eight">8</div>
+                <div class="button number" id="nine">9</div>
+                <div class="button operator" id="divide">/</div>
+            </div>
+            <div class="button-row">
+                <div class="button number" id="four">4</div>
+                <div class="button number" id="five">5</div>
+                <div class="button number" id="six">6</div>
+                <div class="button operator" id="multiply">*</div>
+            </div>
+            <div class="button-row">
+                <div class="button number" id="one">1</div>
+                <div class="button number" id="two">2</div>
+                <div class="button number" id="three">3</div>
+                <div class="button operator" id="subtract">-</div>
+            </div>
+            <div class="button-row">
+                <div class="button number" id="zero">0</div>
+                <div class="button meta" id="decimal">.</div>
+                <div class="button calculate" id="calculate">=</div>
+                <div class="button operator" id="add">+</div>
             </div>
         </div>
     </div>
-    
-    <script src="javascript.js"></script>
+
+
+
+    <script src="javascript2.js"></script>
 </body>
 </html>

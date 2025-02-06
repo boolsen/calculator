@@ -226,7 +226,7 @@ const multiply = function (num1, num2) {
 
 const divide = function (num1, num2) {
     if (num2 === 0) {
-        return 'ERROR';
+        return false;
     }
     return num1 / num2;
 }
@@ -242,6 +242,3 @@ const isNumeric = function (element) {
 
     return false;
 }
-
-//console.log(calculate(['12','(','10','/','2',')','10','-','2']));
-//console.log(divideEquation('12.5+2(2*3)'));

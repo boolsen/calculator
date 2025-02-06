@@ -8,9 +8,9 @@ body {
     align-items: center;
 }
 
-div {
+/* div {
     border: 1px solid black;
-}
+} */
 
 .container {
     display: flex;
@@ -18,6 +18,10 @@ div {
     height: 70svh;
     width: 70svh;
     margin: 0 40px;
+    background-color: rgb(27, 27, 27);
+    border-bottom: 8px solid rgb(95, 95, 95);
+    border-left: 8px solid rgb(95, 95, 95);
+    border-radius: 3%;
 }
 
 .display-container {
@@ -38,6 +42,9 @@ div {
     color: black;
     text-align: end;
     font-size: 2rem;
+    background-color: rgb(192, 192, 192);
+    border-top: 8px solid rgb(95, 95, 95);
+    border-left: 8px solid rgb(95, 95, 95);
 }
 
 .calc-display {
@@ -69,4 +76,9 @@ div {
     justify-content: center;
     align-items: center;
     font-size: 2rem;
+    user-select: none;
+    background-color: rgb(207, 47, 47);
+    box-sizing: border-box;
+    border-bottom: 8px solid rgb(231, 15, 15);
+    border-left: 8px solid rgb(231, 15, 15);
 }
