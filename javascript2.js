@@ -111,7 +111,7 @@ const partialCalculation = function(equationArray) {
     let firstPercent = equationArray.indexOf('%')
     if (firstPercent > 0 && firstPercent <= equationArray.length) {
         let percentRatio = checkIfSafeToCalculate(percent, parseFloat(equationArray[firstPercent - 1]));
-        if (!percentRatio) {
+        if (percentRatio === false) {
             return false;
         }
         equationArray.splice(firstPercent - 1, 2, percentRatio);
@@ -126,7 +126,7 @@ const partialCalculation = function(equationArray) {
     let firstMultiply = equationArray.indexOf('*')
     if (firstMultiply > 0 && firstMultiply < equationArray.length) {
         let product = checkIfSafeToCalculate(multiply, parseFloat(equationArray[firstMultiply-1]),parseFloat(equationArray[firstMultiply+1]));
-        if (!product) {
+        if (product === false) {
             return false;
         }
         equationArray.splice(firstMultiply - 1, 3, product);
@@ -136,7 +136,7 @@ const partialCalculation = function(equationArray) {
     let firstDivide = equationArray.indexOf('/')
     if (firstDivide > 0 && firstDivide < equationArray.length) {
         let result = checkIfSafeToCalculate(divide, parseFloat(equationArray[firstDivide-1]),parseFloat(equationArray[firstDivide+1]));
-        if (!result) {
+        if (result === false) {
             return false;
         }
         equationArray.splice(firstDivide - 1, 3, result);
@@ -146,7 +146,7 @@ const partialCalculation = function(equationArray) {
     let firstAdd = equationArray.indexOf('+')
     if (firstAdd > 0 && firstAdd < equationArray.length) {
         let result = checkIfSafeToCalculate(add, parseFloat(equationArray[firstAdd-1]),parseFloat(equationArray[firstAdd+1]));
-        if (!result) {
+        if (result === false) {
             return false;
         }
         equationArray.splice(firstAdd - 1, 3, result);
@@ -156,7 +156,7 @@ const partialCalculation = function(equationArray) {
     let firstSubtract = equationArray.indexOf('-')
     if (firstSubtract > 0 && firstSubtract < equationArray.length) {
         let result = checkIfSafeToCalculate(subtract, parseFloat(equationArray[firstSubtract-1]),parseFloat(equationArray[firstSubtract+1]));
-        if (!result) {
+        if (result === false) {
             return false;
         }
         equationArray.splice(firstSubtract - 1, 3, result);
