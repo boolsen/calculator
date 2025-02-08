@@ -190,10 +190,10 @@ const calculateParenthesis = function (equationArray) {
         return; //Something went wrong   
     }
     
-    if (firstLeftParanthesisIdx -1 >= 0 && isNaN(parseFloat(equationArray[firstLeftParanthesisIdx - 1]))) {
+    if (firstLeftParanthesisIdx -1 >= 0 && !isNaN(parseFloat(equationArray[firstLeftParanthesisIdx - 1]))) {
         addLeftMultiply = true;
     }
-    if (firstRightParanthesisIdx + 1 >= 0 && isNaN(parseFloat(equationArray[firstRightParanthesisIdx + 1]))) {
+    if (firstRightParanthesisIdx + 1 >= 0 && !isNaN(parseFloat(equationArray[firstRightParanthesisIdx + 1]))) {
         addRightMultiply = true;
     }
     let paranthesisArray = equationArray.slice(firstLeftParanthesisIdx + 1, firstRightParanthesisIdx);
