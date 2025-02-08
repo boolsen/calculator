@@ -15,8 +15,8 @@ body {
 .container {
     display: flex;
     flex-direction: column;
-    height: 70svh;
-    width: 70svh;
+    height: 90svh;
+    width: min(70svh,90vw);
     margin: 0 40px;
     background-color: rgb(27, 27, 27);
     border-bottom: 8px solid rgb(95, 95, 95);
@@ -27,7 +27,7 @@ body {
 .display-container {
     display: flex;
     flex-direction: column;
-    height: 20%;
+    height: 30%;
     gap: 20px;
     padding: 20px;
 }
@@ -70,7 +70,7 @@ body {
 .button {
     aspect-ratio: auto;
     border-radius: 15%;
-    min-width: 50px;
+    min-width: 30px;
     flex: 1;
     display: flex;
     justify-content: center;
@@ -81,4 +81,5 @@ body {
     box-sizing: border-box;
     border-bottom: 8px solid rgb(231, 15, 15);
     border-left: 8px solid rgb(231, 15, 15);
+    flex-shrink: 1;
 }
